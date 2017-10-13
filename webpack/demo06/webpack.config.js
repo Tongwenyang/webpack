@@ -1,34 +1,22 @@
 
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: {
+        app: './src/index.js',                          //当有多个文件的时候 可以 用对象传入值， key 对应 output.filename 中的 [name]
+        print: './src/print.js'
+    },
+    plugins: [
+        new HtmlWebpackPlugin({                     // HtmlWebpackPlugin 创建一个全新的index.html,所有的打包文件会自动添加到Html中
+            title: 'Output Management'
+        }),
+        new CleanWebpackPlugin(['dist'])
+    ],
     output:{
         path: path.resolve(__dirname,"dist"),
-        filename: "bundle.js"
+        filename: "[name].bundle.js"
     },
-    module: {
-        rules: [
-            {
-                test:/\.css$/,
-                use: ['style-loader','css-loader']
-            },
-            {
-                test:/\.(png|svg|jpg|gif)$/,
-                use:['file-loader']
-            },
-            {
-                test: /\.(woff|woff2|eot|otf)$/,
-                use: ['file-loader']
-            },
-            {
-                test: /\.(csv|tsv)$/,
-                use: ['csv-loader']
-            },
-            {
-                test: /\.xml$/,
-                use: [ 'xml-loader']
-            }
-        ]
-    }
+  
 };
